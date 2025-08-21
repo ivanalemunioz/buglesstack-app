@@ -1,0 +1,23 @@
+module.exports = {
+	data_error_required: 'The field {{name}} is required',
+	data_error_max_length: 'The field {{name}} must not be greater than {{value}}',
+	data_error_min_length: 'The length of the field {{name}} must be greater than or equal to {{value}}',
+	data_error_string: 'The field {{name}} must be a text',
+	data_error_enum: 'The field {{name}} is invalid',
+	data_error_regexp: 'The field {{name}} is invalid',
+	data_error_number: 'The field {{name}} must be a number',
+	data_error_integer: 'The field {{name}} must be an integer',
+	data_error_array: 'The field {{name}} is invalid',
+	data_error_email: 'The field {{name}} is invalid',
+	data_error_mobile_number: 'The field {{name}} is invalid',
+	data_error_ISOdate: 'The field {{name}} is not a valid date',
+	data_error_goe: 'The field {{name}} must be greater than or equal to {{value}}',
+	data_error_loe: 'The field {{name}} must be less than or equal to {{value}}',
+	data_error_properties_length: 'The field {{name}} must have {{value}} properties',
+	data_error_array_of_integers: 'The field {{name}} is invalid',
+	data_error_integer_or_array_of_integers: 'The field {{name}} is invalid',
+	data_error_url: 'The field {{name}} must be a URL',
+	data_error_alphanumeric: 'The field {{name}} can only contain letters and numbers',
+	data_error_max_properties_length: 'The field {{name}} cannot have more than {{value}} properties',
+	data_error_object: 'The field {{name}} must be an object'
+};

@@ -1,0 +1,43 @@
+.crashes-page {
+	.tabs {
+		overflow-x: scroll;
+		white-space: nowrap;
+		display: block;
+	}
+
+	.code-tabs {
+		font-size: 12px;
+	}
+
+
+	.tabs > ion-col {
+		background: hsl(var(--accent) / 0.5);
+		color: hsl(var(--accent-foreground));
+		border-top-left-radius: calc(var(--radius)*0.7);
+		border-top-right-radius: calc(var(--radius)*0.7);
+		font-size: 14px;
+		padding: 2px 10px;
+		width: auto !important;
+		cursor: pointer;
+		margin-right: 1px;
+		margin-right: 1px;
+		display: inline-block;
+		line-height: 24px;
+	}
+
+	.tabs > ion-col > img {
+		height: 14px;
+		vertical-align: middle;
+		padding-right: 6px;
+		pointer-events: none;
+	}
+
+	.tabs > ion-col > .file {
+		vertical-align: middle;
+		pointer-events: none;
+	}
+
+	.tabs ion-col.active {
+		background: hsl(var(--accent));
+	}
+}

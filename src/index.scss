@@ -1,0 +1,162 @@
+.vertical-center {
+	position: relative;
+	left: 0;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.text-middle {
+	vertical-align: middle;
+}
+
+.text-sm {
+	font-size: 12px;
+}
+
+.text-m {
+	font-size: 13px;
+}
+
+.text-semi-bold {
+	font-weight: 600;
+}
+
+.cursor-pointer, .activatable {
+	cursor: pointer;
+}
+
+.activatable:hover {
+	background-color: rgb(247, 247, 247);
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+
+table {
+	width: 100%;
+
+	tr > * {
+		padding: 10px;
+		border-bottom: 1px solid var(--ion-color-light-shade);
+	}
+
+	tr > *:first-child, tr > *:last-child {
+		padding: 10px 20px;
+	}
+
+	th {
+		padding: 20px 10px;
+		font-size: 80%;
+		font-weight: normal;
+		color: var(--ion-color-medium);
+	}
+}
+
+.new-order-alert, .cancelled-order-alert {
+	--min-width: 400px;
+
+	.alert-wrapper {
+		--ion-text-color: white;
+	}
+
+	.alert-title {
+		text-transform: uppercase;
+		font-size: 30px;
+	}
+}
+
+.new-order-alert .alert-wrapper {
+	--background: var(--ion-color-success); 
+}
+
+.cancelled-order-alert .alert-wrapper {
+	--background: var(--ion-color-danger); 
+}
+
+
+@media print {
+	/* Remove url and page from print */ 
+	@page {
+		size:  auto;   /* auto is the initial value */
+		margin: 0mm;  /* this affects the margin in the printer settings */
+	}
+}
+
+.z-index-50000 {
+	z-index: 50000 !important;
+}
+
+.sub-item {
+	margin: 10px 0;
+	padding: 10px;
+	border: 0.5px solid #c8c7cc;
+	border-radius: 5px;
+}
+
+.sc-ion-alert-ios.ios {
+	--backdrop-opacity: 1;
+	@apply bg-black/80 opacity-100;
+}
+
+.alert-wrapper.ion-overlay-wrapper.sc-ion-alert-ios {
+	@apply z-50 grid w-full max-w-lg gap-4 border p-6 shadow-lg duration-200 rounded-none sm:rounded-lg;
+}
+
+.alert-title.sc-ion-alert-ios {
+	@apply text-lg font-semibold mt-0;
+}
+
+.alert-sub-title.sc-ion-alert-ios {
+	@apply text-muted-foreground mt-0;
+}
+
+.alert-head.sc-ion-alert-ios {
+	@apply flex flex-col space-y-2 text-center sm:text-left p-0;
+}
+
+.alert-message.sc-ion-alert-ios:empty {
+	@apply hidden;
+}
+
+.alert-button-group.sc-ion-alert-ios {
+	@apply flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2;
+}
+
+.alert-button.ion-focusable.ion-activatable.sc-ion-alert-ios {
+	@apply inline-flex text-foreground items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 mt-2 sm:mt-0;
+
+	border: 1px solid hsl(var(--border));
+	font-size: 0.875rem;
+
+	@apply min-w-min grow-0;
+
+	&:last-child {
+		@apply border-none inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2;
+	}
+}
+
+
+.ion-delegate-host {
+	border-width: 1px;
+	border-radius: 10px;
+}
+
+/* Prism fixes */
+.w-prismjs .token.operator, .w-prismjs .token.entity, .w-prismjs .token.url, .w-prismjs .token.variable {
+	background: hsl(var(--accent));
+}
+
+pre.w-prismjs {
+	font-size: 16px !important;
+	margin: 0;
+	background: transparent;
+}
+
+.dark {
+	.w-prismjs code[class*="language-"] {
+		text-shadow: 0px 1px #000;
+	}
+}

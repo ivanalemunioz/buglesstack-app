@@ -1,0 +1,35 @@
+{
+	"parserOptions": { 
+		"ecmaVersion": 2018 
+	},
+	"env": { 
+		"es6": true, 
+		"node": true
+	}, 
+	"parser": "@typescript-eslint/parser", 
+	"rules": { 
+		"no-console": "off", 
+		"no-use-before-define": "off", 
+		"spaced-comment": "warn",
+		"semi": ["error", "always"],
+		"indent": ["error", "tab"],
+		"no-tabs": "off",
+		"no-mixed-spaces-and-tabs": "off",
+		"no-lone-blocks": "off",
+		"no-return-assign": "off",
+		"brace-style": ["error", "stroustrup"],
+		"multiline-ternary": "off",
+		"no-trailing-spaces": "off",
+		"prefer-regex-literals": "off",
+		"comma-spacing": "error",
+		"react-refresh/only-export-components": "off"
+	}, 
+	"extends": [ 
+		"standard", 
+		"react-app",
+		"react-app/jest"
+	], 
+	"plugins": [ 
+		"react-refresh"
+	]
+}
