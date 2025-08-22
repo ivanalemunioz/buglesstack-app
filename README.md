@@ -82,4 +82,4 @@ Contributions are welcome! If you want to contribute to the project, please foll
 Thank you for your contributions!
 
 ## License
-This project is licensed under the FSL-1.1-Apache-2.0 license. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the FSL-1.1-Apache-2.0 license. See the [LICENSE](LICENSE.md) file for details.
