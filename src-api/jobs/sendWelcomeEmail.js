@@ -18,7 +18,7 @@ const userModel = require('../models/user/index');
 (async () => {
 	console.log('> Send welcome email to users');
     
-	const options = { select: createFields(['id', 'email', 'subscription_status']) };
+	const options = { select: createFields(['id', 'email']) };
 
 	// Yesterday
 	const dateSince = new Date(Date.now() - 86400000);
@@ -34,7 +34,6 @@ const userModel = require('../models/user/index');
 	for (let i = 0; i < users.length; i++) {
 		console.log(`  > User #${i}`);
 		console.log(`   > Email: ${users[i].email}`);
-		console.log(`   > Subscription status: ${users[i].subscription_status}`);
 
 		// continue;
         

@@ -8,8 +8,6 @@ const fields = {
 		'role',
 		'status',
 		'email',
-		'subscription_status',
-		'suscription_status_updated_at',
 		'has_payment_method'
 	]
 };

@@ -10,8 +10,6 @@ const fields = {
 		'user.id',
 		'user.email',
 		'user.status',
-		'user.subscription_status',
-		'user.suscription_status_updated_at',
 		'user.role',
 
 		'created_at',
