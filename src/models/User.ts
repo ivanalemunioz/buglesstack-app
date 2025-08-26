@@ -5,7 +5,6 @@ export class User {
 	@JsonProperty('id', String) id: string = '';
 	@JsonProperty('email', String) email: string = '';
 	@JsonProperty('created_at', String) createdAt: string = '';
-	@JsonProperty('has_payment_method', Boolean) hasPaymentMethod: boolean = false;
 
 	get avatarFallback (): string {
 		return this.email.substring(0, 2).toUpperCase();

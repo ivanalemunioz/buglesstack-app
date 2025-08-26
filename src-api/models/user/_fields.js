@@ -7,8 +7,7 @@ const fields = {
 		'updated_at',
 		'role',
 		'status',
-		'email',
-		'has_payment_method'
+		'email'
 	]
 };
 
