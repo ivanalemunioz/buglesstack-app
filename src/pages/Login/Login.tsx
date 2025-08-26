@@ -56,10 +56,6 @@ const Login: React.FC = () => {
 			}
 			else {
 				const meta = { ...metadata };
-
-				if (!meta.integrated) {
-					meta.time_to_integrate = '0hr to 1hr';
-				}
 				
 				await Authentication.createUser(email, verificationCode, meta);
 			
