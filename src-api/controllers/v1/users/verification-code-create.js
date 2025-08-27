@@ -28,7 +28,7 @@ module.exports = [authentication(roles.WITHOUT_CREDENTIALS), validateData(rules)
 	const email = req.body.email.toLowerCase();
 
 	// Required for test in App Store
-	if (email === 'ivanalemunioz@gmail.com') {
+	if (email === process.env.TESTING_USER_EMAIL) {
 		code = '123ABC';
 	}
 
@@ -55,7 +55,7 @@ module.exports = [authentication(roles.WITHOUT_CREDENTIALS), validateData(rules)
 	const user = await userModel.getByEmail(email);
 
 	// Avoid send dev code email
-	if (process.env.ENV === 'production' && email !== 'ivanalemunioz@gmail.com') {
+	if (process.env.ENV === 'production' && email !== process.env.TESTING_USER_EMAIL) {
 		// Email html
 		const html = await ejs.renderFile('./src-api/views/email/verify-code.ejs', {
 			verify_code: code
