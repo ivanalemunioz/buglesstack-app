@@ -25,17 +25,19 @@ To run the project in development mode, follow these steps:
    ```
 3. Create a `.env` file in the root directory and fill it with the required environment variables. You can use the `.env.example` file as a reference.
 
-4. Start the backend development server:
+4. Import the [db-schema.sql](/db-schema.sql) into your PostgreSQL database
+
+5. Start the backend development server:
    ```bash
    npm run dev:backend
    ```
 
-5. Start the frontend development server:
+6. Start the frontend development server:
    ```bash
    npm run dev
    ```
 
-6. Open your browser and navigate to the URL prompted in the frontend development server terminal to access the application.
+7. Open your browser and navigate to the URL prompted in the frontend development server terminal to access the application.
 
 
 ## Production
@@ -44,11 +46,13 @@ To build and run the project in production mode, follow these steps:
 
 1. Ensure that your environment variables are set correctly in the production environment, check the `.env.example` file for reference. You can create a `.env` file in the root directory of your project with the necessary environment variables.
 
-2. Run the build command:
+2. Import the [db-schema.sql](/db-schema.sql) into your PostgreSQL database
+
+3. Run the build command:
    ```bash
    npm run build
    ```
-3. Start the production server:
+4. Start the production server:
    ```bash
    npm run start
    ```
@@ -63,7 +67,7 @@ To build and run the project in production mode, follow these steps:
     pm2 start npm --name "buglesstack" -- run start
     ```
 
-4. Configure a Stripe Webhook Endpoint to send the events `['customer.subscription.deleted','customer.subscription.updated']` to `/api/v1/stripe/notifications` 
+5. Configure a Stripe Webhook Endpoint to send the events `['customer.subscription.deleted','customer.subscription.updated']` to `/api/v1/stripe/notifications` 
 
 ## Help
 If you need help or have any questions, feel free to open an issue in the [GitHub repository](https://github.com/ivanalemunioz/buglesstack-app/issues).
