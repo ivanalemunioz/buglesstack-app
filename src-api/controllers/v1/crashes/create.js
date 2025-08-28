@@ -55,7 +55,7 @@ module.exports = [
 
 	(req, res, next) => (async () => {
 		// Check if project has reached the crashes limit
-		if (req.project && req.project.current_period_crashes_usage >= req.project.crashes_limit) {
+		if (req.project && req.project.crashes_limit !== -1 && req.project.current_period_crashes_usage >= req.project.crashes_limit) {
 			const error = new Error();
 			error.statusCode = 400;
 			error.message = `You have reached the limit of crashes you can use in this period. If you need to use more crashes, you can go to https://app.buglesstack.com/billing to change your plan. ID ${req.project.id}`;
@@ -105,10 +105,15 @@ module.exports = [
 			time: Date.now()
 		});
 
+		const response = { 
+			id: crash.id
+		};
+		
+		if (process.env.OPEN_SOURCE !== 'true') {
+			response.url = `https://app.buglesstack.com/crashes/${crash.id}`;
+		}
+
 		// Send event id
-		await res.send(200, { 
-			id: crash.id,
-			url: `https://app.buglesstack.com/crashes/${crash.id}`
-		});
+		await res.send(200, response);
 	})().catch(next)
 ];

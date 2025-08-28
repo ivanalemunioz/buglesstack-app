@@ -64,6 +64,12 @@ module.exports = [authentication(CUSTOMER), validateData(rules), (req, res, next
 	// Get all user projects
 	const projects = await userProjectModel.getAllByUser(req.session.user.id, userProjectOptions);
 	
+	// Handle open source deployment
+	if (process.env.OPEN_SOURCE === 'true') {
+		req.body.billing_plan = 'open_source';
+		req.body.billing_period = 'monthly';
+	}
+
 	// Set default options for dev plans
 	if (req.body.billing_plan === 'dev') {
 		req.body.billing_period = 'monthly'; // Free plan is only monthly
@@ -71,7 +77,7 @@ module.exports = [authentication(CUSTOMER), validateData(rules), (req, res, next
 
 	if (creating) {
 		// Check limit of 10 projects
-		if (projects.length >= 10 && process.env.ENV !== 'dev') {
+		if (projects.length >= 10 && process.env.ENV !== 'dev' && process.env.OPEN_SOURCE !== 'true') {
 			return res.send(400, { 
 				error_header: 'You cannot have more than 10 projects', 
 				error_message: 'If you need help managing your projects, please contact us.' 
@@ -130,119 +136,126 @@ module.exports = [authentication(CUSTOMER), validateData(rules), (req, res, next
 		}
 	}
 
-	// Create the Stripe customer (one new customer per project)
-	let stripeCustomer;
-
-	// Prepare subscription data
-	// https://docs.stripe.com/api/subscriptions/create
-	const subscriptionData = {
-		description: req.body.name,
-		items: []
-	};
-
-	if (creating) {
-		stripeCustomer = await createCustomer(req.session.user.email);
-
-		subscriptionData.customer = stripeCustomer.id;
-		subscriptionData.payment_behavior = 'default_incomplete';
-		subscriptionData.trial_period_days = req.body.billing_plan === 'dev' ? 0 : 14; // 14-day trial for non dev projects
-		// days_until_due: 0, // Charge immediately at the end of the trial
-		// off_session: true, // Activate when the customer is not in the session (in the moment to move old subscription to Stripe)
-		subscriptionData.collection_method = 'charge_automatically'; // Charge automatically at the end of the trial	
-		subscriptionData.trial_settings = {
-			end_behavior: {
-				missing_payment_method: 'pause' // Pause subscription if payment method is missing when trial ends
-			}
-		};
-	}
-	
-	// Get billing plan price
-	const billingPlanPrice = await getPriceByLookupKey(`${req.body.billing_plan}_${req.body.billing_period}`);
-
-	// Add billing plan to subscription
-	subscriptionData.items.push({
-		price: billingPlanPrice.id,
-		product: billingPlanPrice.product
-	});
-
-	let subscription;
-
-	if (creating) {
-		// Remove product id (used in edit)
-		for (let i = 0; i < subscriptionData.items.length; i++) {
-			delete subscriptionData.items[i].product;
-		}
-
-		// If the billing plan is dev, set missing_payment_method to create_invoice
-		if (req.body.billing_plan === 'dev' && subscriptionData.items.length === 1) {
-			subscriptionData.trial_settings.end_behavior.missing_payment_method = 'create_invoice'; // Create invoice if payment method is missing when trial ends
-		}
-
-		// Create subscription
-		subscription = await createSubscription(subscriptionData);
-	}
-	else {
-		// If the billing plan is not dev, set missing_payment_method to pause
-		if (req.body.billing_plan !== 'dev') {
-			subscriptionData.payment_behavior = 'default_incomplete';
-		}
-
-		subscription = await getSubscription(userProject.project.stripe_subscription_id);
-
-		// Search old subscription items in new items to set to be updated or deleted
-		for (let i = 0; i < subscription.items.data.length; i++) {
-			const subscriptionItem = subscription.items.data[i];
-
-			const updatedSubscriptionItem = subscriptionData.items.find(i => i.product === subscriptionItem.price.product);
-
-			// Check if the produc exist in the items
-			if (updatedSubscriptionItem) {
-				// Remove the updated item if is the same price
-				if (subscriptionItem.price.id === updatedSubscriptionItem.price) {
-					subscriptionData.items.splice(subscriptionData.items.findIndex(i => i.product === subscriptionItem.price.product), 1);
-				}
-				// Set the subscription item to update
-				else {
-					updatedSubscriptionItem.id = subscriptionItem.id;
-				}
-			}
-			// Set to delete
-			else {
-				subscriptionData.items.push({
-					id: subscriptionItem.id,
-					deleted: true
-				});
-			}
-		}
-
-		// console.log(subscriptionData);
-		// throw new Error('error');
-
-		// Remove product id (used in edit)
-		for (let i = 0; i < subscriptionData.items.length; i++) {
-			delete subscriptionData.items[i].product;
-		}
-
-		// Delete items if there is nothing to update
-		if (subscriptionData.items.length === 0) {
-			delete subscriptionData.items;
-		}
-
-		// Update subscription
-		subscription = await updateSubscription(userProject.project.stripe_subscription_id, subscriptionData);
-	}
-
 	// Prepare project data
 	const data = {
 		name: req.body.name,
 		billing_plan: req.body.billing_plan,
 		billing_period: req.body.billing_period,
-		subscription_status: subscription.status,
-		subscription_trial_end: new Date(subscription.trial_end * 1000),
-		subscription_current_period_end: new Date(subscription.current_period_end * 1000),
-		subscription_current_period_start: new Date(subscription.current_period_start * 1000),
 		updated_at: new Date()
 	};
+
+	// Handle cloud deployment
+	if (process.env.OPEN_SOURCE !== 'true') {
+		// Create the Stripe customer (one new customer per project)
+		let stripeCustomer;
+
+		// Prepare subscription data
+		// https://docs.stripe.com/api/subscriptions/create
+		const subscriptionData = {
+			description: req.body.name,
+			items: []
+		};
+
+		if (creating) {
+			stripeCustomer = await createCustomer(req.session.user.email);
+
+			subscriptionData.customer = stripeCustomer.id;
+			subscriptionData.payment_behavior = 'default_incomplete';
+			subscriptionData.trial_period_days = req.body.billing_plan === 'dev' ? 0 : 14; // 14-day trial for non dev projects
+			// days_until_due: 0, // Charge immediately at the end of the trial
+			// off_session: true, // Activate when the customer is not in the session (in the moment to move old subscription to Stripe)
+			subscriptionData.collection_method = 'charge_automatically'; // Charge automatically at the end of the trial	
+			subscriptionData.trial_settings = {
+				end_behavior: {
+					missing_payment_method: 'pause' // Pause subscription if payment method is missing when trial ends
+				}
+			};
+		}
+		
+		// Get billing plan price
+		const billingPlanPrice = await getPriceByLookupKey(`${req.body.billing_plan}_${req.body.billing_period}`);
+
+		// Add billing plan to subscription
+		subscriptionData.items.push({
+			price: billingPlanPrice.id,
+			product: billingPlanPrice.product
+		});
+
+		let subscription;
+
+		if (creating) {
+			// Remove product id (used in edit)
+			for (let i = 0; i < subscriptionData.items.length; i++) {
+				delete subscriptionData.items[i].product;
+			}
+
+			// If the billing plan is dev, set missing_payment_method to create_invoice
+			if (req.body.billing_plan === 'dev' && subscriptionData.items.length === 1) {
+				subscriptionData.trial_settings.end_behavior.missing_payment_method = 'create_invoice'; // Create invoice if payment method is missing when trial ends
+			}
+
+			// Create subscription
+			subscription = await createSubscription(subscriptionData);
+
+			data.stripe_subscription_id = subscription.id;
+			data.stripe_customer_id = stripeCustomer.id;
+		}
+		else {
+			// If the billing plan is not dev, set missing_payment_method to pause
+			if (req.body.billing_plan !== 'dev') {
+				subscriptionData.payment_behavior = 'default_incomplete';
+			}
+
+			subscription = await getSubscription(userProject.project.stripe_subscription_id);
+
+			// Search old subscription items in new items to set to be updated or deleted
+			for (let i = 0; i < subscription.items.data.length; i++) {
+				const subscriptionItem = subscription.items.data[i];
+
+				const updatedSubscriptionItem = subscriptionData.items.find(i => i.product === subscriptionItem.price.product);
+
+				// Check if the produc exist in the items
+				if (updatedSubscriptionItem) {
+					// Remove the updated item if is the same price
+					if (subscriptionItem.price.id === updatedSubscriptionItem.price) {
+						subscriptionData.items.splice(subscriptionData.items.findIndex(i => i.product === subscriptionItem.price.product), 1);
+					}
+					// Set the subscription item to update
+					else {
+						updatedSubscriptionItem.id = subscriptionItem.id;
+					}
+				}
+				// Set to delete
+				else {
+					subscriptionData.items.push({
+						id: subscriptionItem.id,
+						deleted: true
+					});
+				}
+			}
+
+			// console.log(subscriptionData);
+			// throw new Error('error');
+
+			// Remove product id (used in edit)
+			for (let i = 0; i < subscriptionData.items.length; i++) {
+				delete subscriptionData.items[i].product;
+			}
+
+			// Delete items if there is nothing to update
+			if (subscriptionData.items.length === 0) {
+				delete subscriptionData.items;
+			}
+
+			// Update subscription
+			subscription = await updateSubscription(userProject.project.stripe_subscription_id, subscriptionData);
+		}
+
+		data.subscription_status = subscription.status;
+		data.subscription_trial_end = new Date(subscription.trial_end * 1000);
+		data.subscription_current_period_end = new Date(subscription.current_period_end * 1000);
+		data.subscription_current_period_start = new Date(subscription.current_period_start * 1000);
+	}
 
 	// Set tax_id_limit and request_limit based on billing plan
 	if (req.body.billing_plan === 'dev') {
@@ -250,6 +263,9 @@ module.exports = [authentication(CUSTOMER), validateData(rules), (req, res, next
 	}
 	else if (req.body.billing_plan === 'pro') {
 		data.crashes_limit = req.body.billing_period === 'monthly' ? 50000 : 600000;
+	}
+	else if (req.body.billing_plan === 'open_source') {
+		data.crashes_limit = -1;
 	}
 
 	// Prepare user project data
@@ -259,8 +275,6 @@ module.exports = [authentication(CUSTOMER), validateData(rules), (req, res, next
 		data.created_at = new Date();
 		data.status = 'active';
 		data.access_token = accessToken;
-		data.stripe_subscription_id = subscription.id;
-		data.stripe_customer_id = stripeCustomer.id;
 		
 		// Prepare user project data
 		userProjectData = {

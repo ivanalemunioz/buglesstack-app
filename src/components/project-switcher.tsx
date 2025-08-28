@@ -68,7 +68,7 @@ export function ProjectSwitcher () {
 						</DropdownMenuLabel>
 						{projects.map((project) => (
 							<DropdownMenuItem
-								key={project.project.name}
+								key={project.project.id}
 								onClick={() => ProjectService.selectProject(project)}
 								className="gap-2 p-2"
 							>

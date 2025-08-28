@@ -1,6 +1,9 @@
 // Initialize dotenv
 require('dotenv').config();
 
+// Create OPEN_SOURCE env variable
+process.env.OPEN_SOURCE = String(!process.env.STRIPE_LIVE_SECRET_KEY);
+
 const Sentry = require('@sentry/node');
 const { nodeProfilingIntegration } = require('@sentry/profiling-node');
 

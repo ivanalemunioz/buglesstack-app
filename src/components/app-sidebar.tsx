@@ -27,13 +27,16 @@ const pages = [
 		name: 'Crashes',
 		url: '/crashes',
 		icon: Bug
-	},
-	{
+	}
+];
+
+if (process.env.OPEN_SOURCE !== 'true') {
+	pages.push({
 		name: 'Subscription',
 		url: '/billing',
 		icon: CreditCard
-	}
-];
+	});
+}
 
 export function AppSidebar ({ ...props }: React.ComponentProps<typeof Sidebar>) {
 	const location = useLocation();

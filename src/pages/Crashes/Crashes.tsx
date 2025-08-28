@@ -1,6 +1,6 @@
 import { IonContent, IonPage, IonRow, IonCol, IonSpinner, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/react';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Bug, Check, Copy, ExternalLink } from 'lucide-react';
+import { Bug, Check, Copy, ExternalLink, Infinity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import Mixpanel from '@/libraries/Mixpanel';
@@ -145,7 +145,7 @@ const Crashes: React.FC = () => {
 						{/* Two columns grid */}
 						<div className="flex gap-4">
 							{/* Access token */}
-							<Card className="h-fit w-2/3">
+							<Card className={`h-fit ${process.env.OPEN_SOURCE !== 'true' ? 'w-2/3' : 'w-full'}`}>
 								<CardHeader>
 									<CardTitle>Your Access Token</CardTitle>
 									<CardDescription>
@@ -169,14 +169,14 @@ const Crashes: React.FC = () => {
 								</CardContent>
 							</Card>
 
-							<Card className="h-full w-1/3">
+							{process.env.OPEN_SOURCE !== 'true' && <Card className="h-full w-1/3">
 								<div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
 									<h3 className="font-bold tracking-tight text-sm">Crashes logged in the current period</h3>
 									<Bug className="h-4 w-4 text-muted-foreground" />
 								</div>
 								<CardContent>
 									<div className="text-2xl font-bold">
-										{activeUserProject.project.currentPeriodCrashesUsage} of {activeUserProject.project.crashesLimit.toLocaleString()}
+										{activeUserProject.project.currentPeriodCrashesUsage} of {activeUserProject.project.crashesLimit === -1 ? <Infinity className='inline size-8'/> : activeUserProject.project.crashesLimit.toLocaleString()}
 									</div>
 									{
 										(activeUserProject.project.isSubscriptionActive || activeUserProject.project.isSubscriptionPaused) &&
@@ -185,7 +185,7 @@ const Crashes: React.FC = () => {
 										</Link>
 									}
 								</CardContent>
-							</Card>
+							</Card>}
 						</div>
 
 						{/* Crashes list */}

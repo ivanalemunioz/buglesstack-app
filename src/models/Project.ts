@@ -2,7 +2,8 @@ import { JsonObject, JsonProperty } from 'json2typescript';
 
 const BILLING_PLANS_FORMMATED = {
 	dev: 'Dev',
-	pro: 'Pro'
+	pro: 'Pro',
+	open_source: 'Open Source'
 };
 
 @JsonObject('Project')
@@ -12,13 +13,13 @@ export class Project {
 	@JsonProperty('billing_plan', String) billingPlan: string = '';
 	@JsonProperty('billing_period', String) billingPeriod: string = '';
 	@JsonProperty('access_token', String) accessToken: string = '';
-	@JsonProperty('stripe_subscription_id', String) stripeSubscriptionId: string = '';
+	@JsonProperty('stripe_subscription_id', String, true) stripeSubscriptionId?: string = undefined;
 	@JsonProperty('created_at', String) createdAt: string = '';
 	@JsonProperty('updated_at', String) updatedAt: string = '';
-	@JsonProperty('subscription_status', String) subscriptionStatus: string = '';
-	@JsonProperty('subscription_trial_end', String) subscriptionTrialEnd: string = '';
-	@JsonProperty('subscription_current_period_end', String) subscriptionCurrentPeriodEnd: string = '';
-	@JsonProperty('subscription_cancel_at', String, true) subscriptionCancelAt?: string = undefined;
+	@JsonProperty('subscription_status', String, true) subscriptionStatus?: string = undefined;
+	@JsonProperty('subscription_trial_end', String, true) subscriptionTrialEnd?: string = undefined;
+	@JsonProperty('subscription_current_period_end', String, true) subscriptionCurrentPeriodEnd?: string = undefined;
+	@JsonProperty('subscription_cancel_at', String, true, true) subscriptionCancelAt?: string = undefined;
 	@JsonProperty('current_period_crashes_usage', Number) currentPeriodCrashesUsage: number = 0;
 	@JsonProperty('crashes_limit', Number) crashesLimit: number = 0;
 

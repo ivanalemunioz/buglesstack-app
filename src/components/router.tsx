@@ -41,7 +41,7 @@ const Router: React.FC = () => {
 
 							// Render when has projects
 							...(!enableProjects || userProjects.length > 0 ? [
-								<Route path="/billing" key="/billing" component={Bills} exact />,
+								...(process.env.OPEN_SOURCE !== 'true' ? [<Route path="/billing" key="/billing" component={Bills} exact />] : []),
 								<Route key="/crashes" path="/crashes" component={Crashes} exact />,
 								<Route key="/crashes/:id" path="/crashes/:id" component={CrashDetails} exact />
 							] : [])

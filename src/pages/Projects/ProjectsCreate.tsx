@@ -250,45 +250,49 @@ const ProjectsCreatePage: React.FC = () => {
 													<DataError name="name" />
 												</div>
 
-												{/* Billing period */}
-												{billingPlan !== 'dev' && <div className="grid gap-2">
-													<Label htmlFor="billing_period">Choose the billing period</Label>
-													<Select value={billingPeriod} onValueChange={value => setBillingPeriod(value as any)}>
-														<SelectTrigger id="billing_period">
-															<SelectValue placeholder="Choose an option" />
-														</SelectTrigger>
-														<SelectContent>
-															<SelectItem value="monthly">Monthly</SelectItem>
-															<SelectItem value="yearly">Yearly</SelectItem>
-														</SelectContent>
-													</Select>
-													<DataError name="billing_period" />
-												</div>}
+												{
+													process.env.OPEN_SOURCE !== 'true' && <>
+														{/* Billing period */}
+														{billingPlan !== 'dev' && <div className="grid gap-2">
+															<Label htmlFor="billing_period">Choose the billing period</Label>
+															<Select value={billingPeriod} onValueChange={value => setBillingPeriod(value as any)}>
+																<SelectTrigger id="billing_period">
+																	<SelectValue placeholder="Choose an option" />
+																</SelectTrigger>
+																<SelectContent>
+																	<SelectItem value="monthly">Monthly</SelectItem>
+																	<SelectItem value="yearly">Yearly</SelectItem>
+																</SelectContent>
+															</Select>
+															<DataError name="billing_period" />
+														</div>}
 
-												{/* Billing plan */}
-												<div className="grid gap-2">
-													<Label htmlFor="billing_plan">Which plan do you want for your project?</Label>
-													<Select value={billingPlan} onValueChange={value => setBillingPlan(value as any)}>
-														<SelectTrigger id="billing_plan">
-															<SelectValue placeholder="Choose an option" />
-														</SelectTrigger>
-														<SelectContent>
-															<SelectItem value="dev">Dev</SelectItem>
-															<SelectItem value="pro">Pro - {billingPeriod === 'monthly' ? '5 USD /month' : <>50 USD /year <Badge variant={'secondary'}>2 free months</Badge></>}</SelectItem>
-														</SelectContent>
-													</Select>
-													<DataError name="billing_plan" />
-													<a 
-														className='underline underline-offset-4 text-xs'
-														href="https://buglesstack.com/pricing" 
-														target="_blank"
-														rel="noopener noreferrer"
-														onClick={() => Mixpanel.track('ProjectsCreatePage_click_pricing')}
-													>
-														See differences between plans
-														<ExternalLink className='ml-1 inline size-3' />
-													</a>
-												</div>
+														{/* Billing plan */}
+														<div className="grid gap-2">
+															<Label htmlFor="billing_plan">Which plan do you want for your project?</Label>
+															<Select value={billingPlan} onValueChange={value => setBillingPlan(value as any)}>
+																<SelectTrigger id="billing_plan">
+																	<SelectValue placeholder="Choose an option" />
+																</SelectTrigger>
+																<SelectContent>
+																	<SelectItem value="dev">Dev</SelectItem>
+																	<SelectItem value="pro">Pro - {billingPeriod === 'monthly' ? '5 USD /month' : <>50 USD /year <Badge variant={'secondary'}>2 free months</Badge></>}</SelectItem>
+																</SelectContent>
+															</Select>
+															<DataError name="billing_plan" />
+															<a 
+																className='underline underline-offset-4 text-xs'
+																href="https://buglesstack.com/pricing" 
+																target="_blank"
+																rel="noopener noreferrer"
+																onClick={() => Mixpanel.track('ProjectsCreatePage_click_pricing')}
+															>
+																See differences between plans
+																<ExternalLink className='ml-1 inline size-3' />
+															</a>
+														</div>
+													</>
+												}
 
 												<Button className="w-full" type='submit'>
 													Continue
@@ -303,33 +307,37 @@ const ProjectsCreatePage: React.FC = () => {
 											<span className='text-sm font-medium'>Project Name</span >
 											<span className='text-sm'>{name}</span>
 										</div>
-										{calculateTotal() > 0 && <div className="flex align-center justify-between border-b border-muted-foreground pb-2 border-dashed ">
-											<span className='text-sm font-medium'>Billing Period</span>
-											<span className='text-sm'>
-												{billingPeriod === 'monthly' && 'Monthly'}
-												{billingPeriod === 'yearly' && 'Yearly'}
-											</span>
-										</div>}
-										<div className="flex align-center justify-between">
-											<span className='text-sm font-medium'>Plan</span>
-											<span className='text-sm'>
-												{billingPlan === 'dev' && 'Dev'}
-												{billingPlan === 'pro' && 'Pro'}
-											</span>
-										</div>
-
-										{billingPlan !== 'dev' && <div className='flex align-center justify-between text-sm font-medium border-dashed border-t border-muted-foreground py-2 mb-2'>
-											<span>Total</span>  
-											<span className='text-right '>
-												{calculateTotal()} USD {billingPeriod === 'monthly' ? ' /month' : ' /year'}
-
-												{!editing && calculateTotal() > 0 && <div className='text-xs font-medium text-muted-foreground'>
-													No credit card is required to start.
-													<br />
-													You have 14 days of free trial.
+										{
+											process.env.OPEN_SOURCE !== 'true' && <>
+												{calculateTotal() > 0 && <div className="flex align-center justify-between border-b border-muted-foreground pb-2 border-dashed ">
+													<span className='text-sm font-medium'>Billing Period</span>
+													<span className='text-sm'>
+														{billingPeriod === 'monthly' && 'Monthly'}
+														{billingPeriod === 'yearly' && 'Yearly'}
+													</span>
 												</div>}
-											</span>
-										</div>}
+												<div className="flex align-center justify-between">
+													<span className='text-sm font-medium'>Plan</span>
+													<span className='text-sm'>
+														{billingPlan === 'dev' && 'Dev'}
+														{billingPlan === 'pro' && 'Pro'}
+													</span>
+												</div>
+
+												{billingPlan !== 'dev' && <div className='flex align-center justify-between text-sm font-medium border-dashed border-t border-muted-foreground py-2 mb-2'>
+													<span>Total</span>  
+													<span className='text-right '>
+														{calculateTotal()} USD {billingPeriod === 'monthly' ? ' /month' : ' /year'}
+
+														{!editing && calculateTotal() > 0 && <div className='text-xs font-medium text-muted-foreground'>
+															No credit card is required to start.
+															<br />
+															You have 14 days of free trial.
+														</div>}
+													</span>
+												</div>}
+											</>
+										}
 										
 										<Button className="w-full" variant={'ghost'} onClick={() => setConfirmationRequired(false)}>
 											Change Details
