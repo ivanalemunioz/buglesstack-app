@@ -19,7 +19,8 @@ export default defineConfig(({ mode }) => {
 				MIXPANEL_TOKEN: env.MIXPANEL_TOKEN,
 				NODE_ENV: env.NODE_ENV,
 				ENV: env.ENV,
-				FRONT_SENTRY_DSN: env.FRONT_SENTRY_DSN
+				FRONT_SENTRY_DSN: env.FRONT_SENTRY_DSN,
+				OPEN_SOURCE: String(!env.STRIPE_LIVE_SECRET_KEY)
 			}
 		},
 		css: {
