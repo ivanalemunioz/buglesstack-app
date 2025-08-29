@@ -5,7 +5,6 @@
 ## Requirements
 
 - [Node.js](https://nodejs.org/) v16
-- [Stripe](https://stripe.com/) account to handle the user subscriptions.
 - [Sentry](https://sentry.io/) account to track the errors.
 - [AWS](https://aws.amazon.com/) account to store data in S3 and send emails via SES.
 - [Mixpanel](https://mixpanel.com/) account to track user events.
@@ -66,8 +65,6 @@ To build and run the project in production mode, follow these steps:
     ```bash
     pm2 start npm --name "buglesstack" -- run start
     ```
-
-5. Configure a Stripe Webhook Endpoint to send the events `['customer.subscription.deleted','customer.subscription.updated']` to `/api/v1/stripe/notifications` 
 
 ## Help
 If you need help or have any questions, feel free to open an issue in the [GitHub repository](https://github.com/ivanalemunioz/buglesstack-app/issues).
