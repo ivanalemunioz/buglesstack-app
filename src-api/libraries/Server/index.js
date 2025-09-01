@@ -14,11 +14,13 @@ const { configRoutes } = require('./routes');
 
 const server = restify.createServer();
 
-// The request handler must be the first middleware on the app
-server.use(Sentry.Handlers.requestHandler());
-
-// TracingHandler creates a trace for every incoming request
-server.use(Sentry.Handlers.tracingHandler());
+if (process.env.BACK_SENTRY_DSN) {
+	// The request handler must be the first middleware on the app
+	server.use(Sentry.Handlers.requestHandler());
+	
+	// TracingHandler creates a trace for every incoming request
+	server.use(Sentry.Handlers.tracingHandler());
+}
   
 /* Config CORS */
 const cors = Cors({ 
@@ -51,12 +53,14 @@ function catchError (req, res, err, callback) {
 	// err.statusMessage = err.message || undefined;
 	
 	if (!err.avoidLogging) {
-		Sentry.setUser(req.session ? { 
-			id: req.session.user.id,
-			email: req.session.user.email
-		} : (req.project ? { id: `proj_${req.project.id}` } : null));
-
-		Sentry.captureException(err);
+		if (process.env.BACK_SENTRY_DSN) {
+			Sentry.setUser(req.session ? { 
+				id: req.session.user.id,
+				email: req.session.user.email
+			} : (req.project ? { id: `proj_${req.project.id}` } : null));
+			
+			Sentry.captureException(err);
+		}
 	}
 	else {
 		delete err.avoidLogging;

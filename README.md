@@ -5,9 +5,7 @@
 ## Requirements
 
 - [Node.js](https://nodejs.org/) v16
-- [Sentry](https://sentry.io/) account to track the errors.
 - [AWS](https://aws.amazon.com/) account to store data in S3 and send emails via SES.
-- [Mixpanel](https://mixpanel.com/) account to track user events.
 - [PostgreSQL](https://www.postgresql.org/) database to store user data.
 
 ## Development

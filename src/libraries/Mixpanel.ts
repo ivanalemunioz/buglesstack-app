@@ -14,6 +14,10 @@ export class MixpanelLibrary {
 			else if (this.initializing) {
 	            this.initCallbacks.push(resolve);
 	        }
+			else if (!process.env.MIXPANEL_TOKEN) {
+				this.initialized = true;
+				this.initializing = false;
+			}
 			else {
 	            this.initializing = true;
 
@@ -45,7 +49,7 @@ export class MixpanelLibrary {
 	async track (event: string, properties = {}) {
 	    await this.init();
 		
-	    return mixpanel.track(event, properties);
+	    return process.env.MIXPANEL_TOKEN ? mixpanel.track(event, properties) : null;
 	}
 
 	/**
@@ -54,9 +58,9 @@ export class MixpanelLibrary {
 	async identify (userId: string, data?: any) {
 	    await this.init();
 
-	    mixpanel.identify(userId);
+	    process.env.MIXPANEL_TOKEN && mixpanel.identify(userId);
 		
-	    if (data) {
+	    if (process.env.MIXPANEL_TOKEN && data) {
 	        mixpanel.people.set_once(data);
 	    }
 	}
@@ -69,7 +73,7 @@ export class MixpanelLibrary {
 	async reset () {
 	    await this.init(); 
 		
-	    return mixpanel.reset();
+	    return process.env.MIXPANEL_TOKEN ? mixpanel.reset() : null;
 	}
 }
 
