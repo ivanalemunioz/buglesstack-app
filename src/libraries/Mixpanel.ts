@@ -58,11 +58,13 @@ export class MixpanelLibrary {
 	async identify (userId: string, data?: any) {
 	    await this.init();
 
-	    process.env.MIXPANEL_TOKEN && mixpanel.identify(userId);
-		
-	    if (process.env.MIXPANEL_TOKEN && data) {
-	        mixpanel.people.set_once(data);
-	    }
+		if (process.env.MIXPANEL_TOKEN) {
+			mixpanel.identify(userId);
+			
+			if (data) {
+				mixpanel.people.set_once(data);
+			}
+		}
 	}
 
 	/**
