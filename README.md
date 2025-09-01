@@ -1,6 +1,6 @@
 # Buglesstack 🐛
 
-[Buglesstack](https://buglesstack.com/) is a project that aims to provide an easy way to track browser automations crashes.
+[Buglesstack](https://buglesstack.com/) is an Open Source project that aims to provide an easy way to track browser automations crashes.
 
 ## Requirements
 
