@@ -117,7 +117,8 @@ CREATE TABLE public.crashes (
     updated_at timestamp with time zone NOT NULL,
     metadata jsonb NOT NULL,
     url text NOT NULL,
-    project_id text NOT NULL
+    project_id text NOT NULL,
+    share_token text,
 );
 
 
@@ -279,6 +280,14 @@ CREATE INDEX crashes_created_at_index ON public.crashes USING btree (created_at 
 --
 
 CREATE INDEX crashes_project_id_index ON public.crashes USING btree (project_id DESC NULLS LAST);
+
+
+--
+-- TOC entry 4208 (class 1259 OID 131492839)
+-- Name: crashes_share_token_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX crashes_share_token_index ON public.crashes USING btree (share_token DESC NULLS LAST);
 
 
 --
