@@ -22,7 +22,7 @@ const Router: React.FC = () => {
 	const location = useLocation();
 
 	const enableProjects = isAuthenticated && user/* && !user.billingPlan */;
-	const enableSidebar = isAuthenticated && user && (!enableProjects || userProjects.length > 0) && location.pathname !== '/projects/new' && location.pathname !== '/projects/edit';
+	const enableSidebar = isAuthenticated && user && (!enableProjects || userProjects.length > 0) && location.pathname !== '/projects/new' && location.pathname !== '/projects/edit' && !location.pathname.includes('crashes/shared');
 	
 	return (
 		<SidebarProvider>
@@ -50,7 +50,10 @@ const Router: React.FC = () => {
 						// Render when isn't authenticated
 							<Route path="/login" component={Login} exact />
 						)
+
 					}
+
+					<Route path="/crashes/shared/:id" component={CrashDetails} exact />
 
 					{/* Handle redirection */}
 					<Redirect to={

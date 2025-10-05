@@ -8,5 +8,6 @@ const router = new Router();
 router.post('', require('./create'));
 router.get('', require('./get'));
 router.get('/:id', require('./details'));
+router.get('/shared/:shareToken', require('./shared'));
 
 module.exports = router;

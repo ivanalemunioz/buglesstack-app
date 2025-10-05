@@ -20,6 +20,15 @@ class CrashService {
 
 		return JsonConverter.deserializeObject(res.data, Crash);
 	}
+
+	/**
+	 * Get crash by share token
+	 **/
+	async getShared (shareToken: string): Promise<Crash> {
+		const res = await Server.get(`v1/crashes/shared/${shareToken}`);
+
+		return JsonConverter.deserializeObject(res.data, Crash);
+	}
 }
 
 const crashService = new CrashService();

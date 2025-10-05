@@ -36,7 +36,8 @@ const CrashDetailsPage = () => {
 	const [jsEnabled, setJsEnabled] = useState(false);
 	const [iframeKey, setIframeKey] = useState(0);
 
-	const crashId = location.pathname.split('/')[2] || null;
+	const shared = !!location.pathname.match(/\/shared\/.+/);
+	const crashId = location.pathname.split('/')[shared ? 3 : 2] || null;
 	
 	// Function to get the crash details
 	const getCrash = useCallback(async () => {
@@ -46,7 +47,7 @@ const CrashDetailsPage = () => {
 
 		try {
 			// Get the crash details
-			const newCrash = await CrashService.getById(crashId);
+			const newCrash = shared ? await CrashService.getShared(crashId) : await CrashService.getById(crashId);
 
 			setCrash(newCrash);
 			getCrashHtml(newCrash);
@@ -56,7 +57,7 @@ const CrashDetailsPage = () => {
 
 			await InfoHelper.showErrorAlert();
 		}
-	}, [crashId]);
+	}, [shared, crashId]);
 
 	// Function to get the crash html
 	const getCrashHtml = async (crash: Crash) => {
@@ -119,7 +120,7 @@ const CrashDetailsPage = () => {
 
 	return (
 		<IonPage className="crash-details-page">
-			<header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+			{!shared && <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
 				<div className="flex items-center gap-2 px-4">
 					<SidebarTrigger className="-ml-1" />
 					<Separator orientation="vertical" className="mr-2 h-4" />
@@ -143,10 +144,10 @@ const CrashDetailsPage = () => {
 						</BreadcrumbList>
 					</Breadcrumb>
 				</div>
-			</header>
+			</header>}
 			<IonContent>
 				{/* Crash details */}
-				{crash && <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+				{crash && <div className={`flex flex-1 flex-col gap-4 p-4 pt-0 ${shared ? 'pt-4' : ''}`}>
 					<div className="flex flex-col gap-x-4 space-y-2">
 						<h2 className="text-2xl font-bold tracking-tight">{crash.message}</h2>
 						<p className="text-sm text-muted-foreground">

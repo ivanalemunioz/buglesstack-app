@@ -14,3 +14,13 @@ module.exports = new BaseModel('crashes', require('./map'), 'crash', require('./
  * @return {any}
  **/
 module.exports.getByProject = createMethod(require('./getByProject'), module.exports);
+
+/**
+ * Get by share token
+ *
+ * @param {string} shareToken Share token
+ * @param {any} options Method call options
+ *
+ * @return {any}
+ **/
+module.exports.getByShareToken = createMethod(require('./getByShareToken'), module.exports);
