@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/) v16
+- [Node.js](https://nodejs.org/) v22
 - [AWS](https://aws.amazon.com/) account to store data in S3 and send emails via SES.
 - [PostgreSQL](https://www.postgresql.org/) database to store user data.
 
