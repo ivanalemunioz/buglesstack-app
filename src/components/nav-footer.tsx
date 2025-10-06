@@ -100,7 +100,7 @@ export function NavFooter () {
 						<DropdownMenuSeparator />
 						<DropdownMenuItem asChild>
 							<a
-								href="https://buglesstack.com/docs" 
+								href="https://buglesstack.com/docs/introduction/" 
 								target="_blank"
 								rel="noopener noreferrer"
 								onClick={() => Mixpanel.track('SideBar_click_docs')}

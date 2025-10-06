@@ -100,7 +100,7 @@ function catchError (req, res, err, callback) {
 }
 
 // Add health endpoint
-server.get('/health', function (_req, res) {
+server.get('/health', function (_req, res, _next) {
 	res.json({ heartbeat: 'beating' });
 });
 
@@ -108,7 +108,7 @@ server.get('/health', function (_req, res) {
 configRoutes(server);
 
 // Serve static html
-server.get('/*', function (req, res) {
+server.get('/*', function (req, res, _next) {
 	const filepath = join(__dirname, '/../../../build', req.path().replace(/\.\.\//g, ''));
     
 	try {

@@ -40,26 +40,28 @@ const rulesForRefreshToken = [
 /**
  * Authenticate
  **/
-module.exports = [validateData(rules), (req, res, next) => (async () => {
-	let rules, functionToCall;
+module.exports = [validateData(rules), (req, res, next) => {
+	(async () => {
+		let rules, functionToCall;
 
-	if (req.body.type === 'verification_code') {
-		rules = [...rulesForVerificationCode];
-		functionToCall = authenticateVerificationCode;
-	}
-	else if (req.body.type === 'refresh_token') {
-		rules = [...rulesForRefreshToken];
-		functionToCall = authenticateRefreshToken;
-	}
-
-	validateData(rules)(req, res, err => {
-		if (err) {
-			return next(err);
+		if (req.body.type === 'verification_code') {
+			rules = [...rulesForVerificationCode];
+			functionToCall = authenticateVerificationCode;
+		}
+		else if (req.body.type === 'refresh_token') {
+			rules = [...rulesForRefreshToken];
+			functionToCall = authenticateRefreshToken;
 		}
 
-		functionToCall(req, res, next).catch(next);
-	});
-})().catch(next)];
+		validateData(rules)(req, res, err => {
+			if (err) {
+				return next(err);
+			}
+
+			functionToCall(req, res, next).catch(next);
+		});
+	})().catch(next);
+}];
 
 /**
  * Function called when authenticate via verification code
