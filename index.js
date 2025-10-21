@@ -26,5 +26,5 @@ if (process.env.BACK_SENTRY_DSN) {
 
 const { startServer } = require('./src-api/libraries/Server/index');
 
-// Start server
+// Start server 
 startServer();
