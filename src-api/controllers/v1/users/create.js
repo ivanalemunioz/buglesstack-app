@@ -1,6 +1,5 @@
 const { validateData } = require('../../../libraries/DataValidation/index');
 const { authentication, roles } = require('../../../libraries/Session/index');
-const { sendEmail } = require('../../../libraries/AmazonSES/index');
 
 const userModel = require('../../../models/user/index');
 const verifyCodeModel = require('../../../models/verifyCode/index');
@@ -78,33 +77,6 @@ module.exports = [authentication(roles.WITHOUT_CREDENTIALS), validateData(rules)
 
 		// Create
 		const user = await userModel.create(data);
-
-		// Notify new user
-		await sendEmail({
-			Source: 'Ivan from Buglesstack <ivan@buglesstack.com>',
-			Destination: { ToAddresses: ['ivanalemunioz@gmail.com'] },
-			Message: {
-				Subject: {
-					Charset: 'UTF-8',
-					Data: 'New user created'
-				},
-				Body: {
-					Html: {
-						Charset: 'UTF-8',
-						Data: `
-						Hello, a new user has been created.<br/>
-						<br/>
-						Email: ${email}<br/>
-						<br/>
-						Created at: ${data.created_at.toISOString()}<br/>
-						<br/>
-						Have a great day,<br/>  
-						Ivan
-					`
-					}
-				}
-			}
-		});
 
 		// Prepare session token data
 		const sessionTokenData = {
