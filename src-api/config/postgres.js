@@ -1,5 +1,5 @@
 module.exports = { 
-	connectionString: process.env.DATABASE_URL,
+	connectionString: process.env.DATABASE_URL_NEON,
 	ssl: { rejectUnauthorized: false }
 	// ssl: {
 	// 	rejectUnauthorized: true,
